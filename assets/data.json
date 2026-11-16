@@ -1,1 +1,202 @@
-
+{
+  "settings": {
+    "siteTitle": "Ashrafuzzaman | Personal Directory",
+    "adminPasscode": "Ash@044510",
+    "heroOverlay": 0.55,
+    "animationIntensity": "dynamic"
+  },
+  "profile": {
+    "name": "Ashrafuzzaman",
+    "headline": "Finance & Accounting Professional | CMA Aspirant (ICMAB)",
+    "subheadline": "Financial Reporting, Reconciliation & Internal Controls | QuickBooks Online Advanced Certified ProAdvisor",
+    "summary": "CMA aspirant and Finance & Banking graduate with over two years of hands-on experience in full-cycle bookkeeping, financial reporting, reconciliation, and internal controls across multi-entity environments. Recognized for accuracy, problem-solving, and clear communication, with adaptability to fast-paced and hybrid working environments.",
+    "photo": "",
+    "location": "Dhanmondi, Dhaka-1205, Bangladesh",
+    "email": "azaman.qb2@gmail.com",
+    "phone": "+880 1780-783038",
+    "linkedin": "https://linkedin.com/in/azaman201",
+    "resumeLink": "",
+    "heroBackground": "assets/1775470668186.jpg"
+  },
+  "tabs": [
+    { "id": "about", "label": "About", "type": "about", "visible": true },
+    { "id": "values", "label": "Values & Faith", "type": "values", "visible": true },
+    { "id": "career", "label": "Career / Experience", "type": "experience", "visible": true },
+    { "id": "education", "label": "Education & Certifications", "type": "education", "visible": true },
+    { "id": "skills", "label": "Skills", "type": "skills", "visible": true },
+    { "id": "projects", "label": "Projects", "type": "projects", "visible": true },
+    { "id": "events", "label": "Events", "type": "events", "visible": true },
+    { "id": "gallery", "label": "Gallery / Media", "type": "gallery", "visible": true }
+  ],
+  "about": {
+    "heading": "About Me",
+    "body": "I am a finance and accounting professional committed to integrity, discipline, and continuous growth. My work spans full-cycle bookkeeping, financial reporting, reconciliations, and internal controls across multi-entity environments. I value professionalism in every engagement and strive to deliver accurate, reliable, and timely financial information.",
+    "highlights": [
+      "Over two years of hands-on experience in accounting and finance",
+      "Monthly financial statements, adjusted trial balances, and consolidated MIS reporting for 17+ SBUs",
+      "Experienced with ERP (iBOS), QuickBooks Online, SQL, and Excel automation",
+      "Strong focus on accuracy, reconciliation, and audit-ready documentation"
+    ],
+    "quote": "Integrity and professionalism guide my work, and my faith guides my character."
+  },
+  "values": {
+    "heading": "Values & Faith",
+    "intro": "My personal and professional life is guided by faith, ethics, and a commitment to excellence.",
+    "principles": [
+      {
+        "title": "Faith in Islam",
+        "text": "My belief in Islam shapes my character, sense of responsibility, and conduct. I strive to uphold honesty, humility, gratitude, and accountability in all that I do."
+      },
+      {
+        "title": "Integrity",
+        "text": "I believe trust is built through transparency, truthfulness, and ethical action. I aim to be dependable and principled, especially when handling financial responsibilities."
+      },
+      {
+        "title": "Professionalism",
+        "text": "I am committed to quality work, respectful communication, continuous learning, and delivering results with diligence and care."
+      }
+    ],
+    "closing": "These values influence how I learn, collaborate, and contribute to every organization and community I am part of."
+  },
+  "experience": [
+    {
+      "role": "Senior Officer, Finance – Trading Cluster",
+      "company": "AKIJ Resource",
+      "period": "Aug 2026 – Present",
+      "location": "",
+      "description": "Prepare monthly financial statements, adjusted trial balances, and closing entries for multiple Strategic Business Units (SBUs), ensuring complete reconciliation with ERP records.",
+      "bullets": [
+        "Develop consolidated and comparative financial reports using dynamic Excel models linked to ERP data from iBOS.",
+        "Perform bank, intercompany, general ledger, and AR/AP reconciliations; investigate variances and post adjusting journal entries.",
+        "Prepare customer and supplier aging analyses, maintain receivable ledgers, and reconcile collection records.",
+        "Prepare audit schedules, supporting schedules, and financial working papers with rigorous verification.",
+        "Develop MIS reports and Executive Committee (EC) presentations; document process flows, approval matrices, and internal controls.",
+        "Extract and analyze journal, GL, and invoice data using SQL; automate recurring reports with advanced Excel and Python (openpyxl)."
+      ]
+    },
+    {
+      "role": "Bookkeeper | QuickBooks Online Specialist",
+      "company": "Go-Get Bookkeeping, Payroll & Tax Services",
+      "period": "May 2025 – Jul 2026",
+      "location": "Dhaka, Bangladesh & Saskatoon, Canada",
+      "description": "Managed full-cycle bookkeeping across multiple industries using QuickBooks Online.",
+      "bullets": [
+        "Recorded daily transactions, performed monthly categorization, and maintained accurate general ledger records.",
+        "Performed bank and credit card reconciliations to ensure accuracy and resolve discrepancies.",
+        "Handled Accounts Payable and Receivable, including multi-currency vendor transactions and payment tracking.",
+        "Prepared monthly financial reports including Profit & Loss, Balance Sheet, and AR/AP aging reports.",
+        "Maintained and updated Chart of Accounts, tax codes, and financial structures for multiple entities.",
+        "Prepared financial records that supported statutory audit review; contributed to leave/time tracking and payroll workflow design."
+      ]
+    },
+    {
+      "role": "QuickBooks Online Accountant (Part-Time)",
+      "company": "24x7 QBO Accountants",
+      "period": "Jul 2024 – May 2025",
+      "location": "",
+      "description": "Supported clients with reconciliations, categorization, and financial reporting in QuickBooks Online.",
+      "bullets": [
+        "Performed bank reconciliations and transaction categorization for business and individual clients.",
+        "Prepared monthly and annual financial statements using QuickBooks Online.",
+        "Analyzed financial data and improved accuracy of reporting and transaction classification.",
+        "Assisted clients in maintaining organized and audit-ready accounting records."
+      ]
+    },
+    {
+      "role": "Auditor (Contract Assignment)",
+      "company": "Polar Ice Cream – Bangladesh",
+      "period": "January 2024",
+      "location": "Bangladesh",
+      "description": "Inventory verification and reconciliation support.",
+      "bullets": [
+        "Verified physical inventory and validated stock counts.",
+        "Reconciled inventory records with system data and reported discrepancies.",
+        "Collaborated with warehouse teams to ensure inventory accuracy and compliance."
+      ]
+    },
+    {
+      "role": "Inventory Audit Assistant (5-Day Assignment)",
+      "company": "Avery Dennison – Paxar Bangladesh Ltd",
+      "period": "December 2024",
+      "location": "Bangladesh",
+      "description": "Short-term inventory audit assistance.",
+      "bullets": [
+        "Conducted physical inventory verification and stock count validation.",
+        "Reconciled inventory records with system data and reported discrepancies.",
+        "Collaborated with warehouse teams to ensure inventory accuracy and compliance."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "degree": "CMA (Cost & Management Accountant)",
+      "institution": "The Institute of Cost and Management Accountants of Bangladesh (ICMAB)",
+      "period": "In progress",
+      "details": "Completed 600 / 2,000 marks (without exemptions)."
+    },
+    {
+      "degree": "BBA, Major in Finance & Banking",
+      "institution": "Govt. Bangla College, Dhaka (Affiliated with the University of Dhaka)",
+      "period": "Session 2020–21 | Final Year (Result Awaited)",
+      "details": ""
+    },
+    {
+      "degree": "HSC (Higher Secondary Certificate), Business Administration",
+      "institution": "Sailkona College, Natore – Rajshahi Board",
+      "period": "2020 | GPA: 3.92 / 5.00",
+      "details": "COVID-19 affected examination."
+    }
+  ],
+  "certifications": [
+    { "name": "QuickBooks Online Advanced Certified ProAdvisor", "issuer": "Intuit QuickBooks", "date": "", "link": "" },
+    { "name": "QuickBooks Online Certified ProAdvisor", "issuer": "Intuit QuickBooks", "date": "", "link": "" },
+    { "name": "Trained Bookkeeper (QuickBooks Online)", "issuer": "", "date": "", "link": "" }
+  ],
+  "skills": {
+    "groups": [
+      {
+        "category": "Accounting & Finance",
+        "items": ["Full-Cycle Bookkeeping", "Bank & GL Reconciliation", "Financial Reporting (P&L, Balance Sheet)", "Accounts Payable & Receivable", "Month-End Close", "Audit Support", "Payroll Accounting", "Inventory Accounting", "Fixed Asset Management", "Multi-Currency Transactions", "Chart of Accounts Management"]
+      },
+      {
+        "category": "Compliance & Taxation",
+        "items": ["VAT & Tax (Bangladesh)", "Tax Deducted at Source (TDS)", "Advance Tax Payment", "GST/PST (Saskatoon, Canada)", "T4 Individual Tax Return (Bangladesh/Canada)"]
+      },
+      {
+        "category": "Technical Skills",
+        "items": ["QuickBooks Online", "QuickBooks Time", "iBOS ERP", "Nuvvo ERP/Omni/POS", "Xero", "Microsoft Excel (dynamic models, advanced functions)", "SQL", "Microsoft Word", "Microsoft PowerPoint", "Python (openpyxl)"]
+      },
+      {
+        "category": "Languages",
+        "items": ["Bangla (Native)", "English (Professional Working Proficiency)"]
+      }
+    ]
+  },
+  "projects": [
+    {
+      "title": "Sample Project (edit in admin)",
+      "date": "",
+      "summary": "Add your projects here. You can include description, role, tools, outcomes, images, and links.",
+      "image": "",
+      "link": "",
+      "tags": ["Editable"]
+    }
+  ],
+  "events": [
+    {
+      "title": "Sample Event (edit in admin)",
+      "date": "",
+      "summary": "Add events you participate in or organize. This section is designed so you can easily add more in the future.",
+      "image": "",
+      "link": "",
+      "tags": ["Editable"]
+    }
+  ],
+  "gallery": [
+    {
+      "title": "Cover Background",
+      "caption": "Profile page cover image.",
+      "image": "assets/1775470668186.jpg"
+    }
+  ]
+}
