@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashrafuzzaman | Personal Directory</title>
+  <meta name="description" content="Personal directory and professional profile of Ashrafuzzaman." />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <div id="app-loading" class="app-loading">Loading profile…</div>
+
+  <header class="hero" id="hero">
+    <div class="hero-bg" id="heroBg"></div>
+    <div class="hero-overlay" id="heroOverlay"></div>
+    <div class="hero-content container">
+      <div class="hero-profile reveal">
+        <div class="profile-photo-wrap" id="profilePhotoWrap">
+          <img id="profilePhoto" class="profile-photo" alt="Profile photo" />
+          <div id="profilePhotoFallback" class="profile-photo-fallback">A</div>
+        </div>
+        <div class="hero-text">
+          <p class="eyebrow">Personal Directory</p>
+          <h1 id="profileName">Ashrafuzzaman</h1>
+          <p id="profileHeadline" class="headline"></p>
+          <p id="profileSubheadline" class="subheadline"></p>
+          <div class="hero-actions">
+            <a id="linkedinLink" class="btn primary" href="#" target="_blank" rel="noopener">LinkedIn</a>
+            <a id="emailLink" class="btn" href="#">Email</a>
+            <a id="resumeLink" class="btn" href="#" target="_blank" rel="noopener" style="display:none">Resume</a>
+          </div>
+          <div class="hero-meta" id="heroMeta"></div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint" aria-hidden="true"><span></span></div>
+  </header>
+
+  <div id="adminBar" class="admin-bar hidden">
+    <div class="container admin-bar-inner">
+      <div><strong>Admin mode</strong> <span class="muted">— edits save to this browser. Use Export/Import JSON to back up or move changes.</span></div>
+      <div class="admin-bar-actions">
+        <button id="btnExport" class="btn small">Export JSON</button>
+        <label class="btn small file-label">Import JSON<input id="importFile" type="file" accept="application/json" hidden></label>
+        <button id="btnReset" class="btn small danger">Reset to default</button>
+        <button id="btnExitAdmin" class="btn small">Exit admin</button>
+      </div>
+    </div>
+  </div>
+
+  <nav class="tabs-nav sticky" id="tabsNav" aria-label="Profile sections">
+    <div class="container">
+      <div class="tabs-list" id="tabsList"></div>
+    </div>
+  </nav>
+
+  <main id="mainContent" class="container main-content"></main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p id="footerText"></p>
+    </div>
+  </footer>
+
+  <div id="adminModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <h3 id="modalTitle">Edit</h3>
+        <button class="icon-btn" data-close-modal aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-footer" id="modalFooter"></div>
+    </div>
+  </div>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
