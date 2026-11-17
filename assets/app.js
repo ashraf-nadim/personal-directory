@@ -25,7 +25,13 @@
     } catch { return null; }
   }
   function saveData() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.data));
+      return true;
+    } catch (err) {
+      alert("Could not save: this browser's local storage is full or unavailable.\n\nTry a smaller image, or remove another large image first. (" + err.message + ")");
+      return false;
+    }
   }
   function mergeData(base, saved) {
     if (!saved) return deepClone(base);
@@ -101,6 +107,11 @@
       img.style.display = "none"; fallback.style.display = "grid";
       fallback.textContent = (p.name || "A").trim().charAt(0).toUpperCase() || "A";
     }
+    const photoBtn = $("#photoEditBtn");
+    if (photoBtn) {
+      photoBtn.classList.toggle("hidden", !state.isAdmin);
+      photoBtn.onclick = openProfileEditor;
+    }
     const li = $("#linkedinLink");
     if (p.linkedin) { li.href = p.linkedin; li.style.display = ""; } else li.style.display = "none";
     const em = $("#emailLink");
@@ -125,11 +136,53 @@
     const tabs = state.isAdmin ? (state.data.tabs || []) : getVisibleTabs();
     list.innerHTML = tabs.map(t => {
       const hiddenMark = (state.isAdmin && t.visible === false) ? " (hidden)" : "";
-      return `<button class="tab-btn ${t.id === state.activeTab ? "active" : ""}" data-tab="${escapeHtml(t.id)}" role="tab">${escapeHtml(t.label)}${hiddenMark}</button>`;
+      const dragAttrs = state.isAdmin ? ` draggable="true" title="Drag to reorder"` : "";
+      return `<button class="tab-btn ${t.id === state.activeTab ? "active" : ""}" data-tab="${escapeHtml(t.id)}" role="tab"${dragAttrs}>${escapeHtml(t.label)}${hiddenMark}</button>`;
     }).join("") + (state.isAdmin ? `<button class="tab-btn" data-manage-tabs="1">+ Tabs</button>` : "");
     $$(".tab-btn[data-tab]", list).forEach(btn => btn.addEventListener("click", () => setActiveTab(btn.dataset.tab)));
     const manage = $('[data-manage-tabs="1"]', list);
     if (manage) manage.addEventListener("click", openTabsManager);
+    if (state.isAdmin) bindTabReorder(list);
+  }
+
+  function moveTab(fromId, toId) {
+    const tabs = state.data.tabs || [];
+    const from = tabs.findIndex(t => t.id === fromId);
+    const to = tabs.findIndex(t => t.id === toId);
+    if (from < 0 || to < 0 || from === to) return;
+    const [moved] = tabs.splice(from, 1);
+    tabs.splice(to, 0, moved);
+    saveData();
+    renderAll();
+  }
+
+  // Admin-only: drag a tab left/right on the tab bar to reorder it.
+  function bindTabReorder(list) {
+    let dragId = null;
+    $$(".tab-btn[data-tab]", list).forEach(btn => {
+      btn.addEventListener("dragstart", e => {
+        dragId = btn.dataset.tab;
+        btn.classList.add("dragging");
+        e.dataTransfer.effectAllowed = "move";
+        try { e.dataTransfer.setData("text/plain", dragId); } catch {}
+      });
+      btn.addEventListener("dragend", () => { dragId = null; btn.classList.remove("dragging"); });
+      btn.addEventListener("dragover", e => {
+        if (!dragId || btn.dataset.tab === dragId) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = "move";
+        btn.classList.add("drop-target");
+      });
+      btn.addEventListener("dragleave", () => btn.classList.remove("drop-target"));
+      btn.addEventListener("drop", e => {
+        e.preventDefault();
+        btn.classList.remove("drop-target");
+        const from = dragId, to = btn.dataset.tab;
+        dragId = null;
+        if (!from || !to || from === to) return;
+        moveTab(from, to);
+      });
+    });
   }
 
   function sectionAdminBar(tab) {
@@ -357,6 +410,92 @@
     return data;
   }
 
+  // Image upload helpers
+  function readImageFile(file, maxDim, quality = 0.85) {
+    return new Promise((resolve, reject) => {
+      if (!file || !/^image\//i.test(file.type)) return reject(new Error("Please choose an image file (JPG, PNG, WebP…)."));
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        const scale = Math.min(1, maxDim / Math.max(img.width, img.height));
+        const w = Math.max(1, Math.round(img.width * scale));
+        const h = Math.max(1, Math.round(img.height * scale));
+        const canvas = document.createElement("canvas");
+        canvas.width = w; canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#0b1220";
+        ctx.fillRect(0, 0, w, h);
+        ctx.drawImage(img, 0, 0, w, h);
+        URL.revokeObjectURL(url);
+        const webp = canvas.toDataURL("image/webp", quality);
+        resolve(webp.startsWith("data:image/webp") ? webp : canvas.toDataURL("image/jpeg", quality));
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("That image could not be read.")); };
+      img.src = url;
+    });
+  }
+
+  function imagePicker(label, name, value, hint, shape = "") {
+    const v = (value || "").trim();
+    const preview = v
+      ? `<img src="${escapeHtml(v)}" alt="Current selection" onerror="this.style.display='none'">`
+      : `<span class="image-picker-empty">No image</span>`;
+    return `<div class="field image-picker" data-picker="${name}">
+      <span>${escapeHtml(label)}</span>
+      <div class="image-picker-row">
+        <div class="image-picker-preview ${shape}">${preview}</div>
+        <div class="image-picker-actions">
+          <label class="btn small file-label">Upload image<input type="file" accept="image/*" data-image-input="${name}" hidden></label>
+          <button type="button" class="btn small" data-image-clear="${name}">Remove</button>
+          ${hint ? `<div class="form-hint">${escapeHtml(hint)}</div>` : ""}
+        </div>
+      </div>
+      <input type="hidden" name="${name}" value="${escapeHtml(v)}">
+      <input type="text" data-image-url="${name}" placeholder="…or paste an image path / URL" value="${v.startsWith("data:") ? "" : escapeHtml(v)}">
+    </div>`;
+  }
+
+  function bindImagePickers() {
+    $$("[data-image-input]").forEach(input => {
+      const name = input.dataset.imageInput;
+      const wrap = input.closest(".image-picker");
+      const hidden = wrap.querySelector(`input[type="hidden"][name="${name}"]`);
+      const urlInput = wrap.querySelector(`[data-image-url="${name}"]`);
+      const preview = wrap.querySelector(".image-picker-preview");
+      const maxDim = name === "heroBackground" ? 1600 : 720;
+      input.onchange = async () => {
+        const file = input.files && input.files[0];
+        if (!file) return;
+        try {
+          const dataUrl = await readImageFile(file, maxDim, 0.85);
+          hidden.value = dataUrl;
+          if (urlInput) urlInput.value = "";
+          preview.innerHTML = `<img src="${dataUrl}" alt="New selection">`;
+        } catch (err) {
+          alert(err.message);
+        } finally {
+          input.value = "";
+        }
+      };
+      if (urlInput) urlInput.oninput = () => {
+        hidden.value = urlInput.value.trim();
+        preview.innerHTML = hidden.value
+          ? `<img src="${escapeHtml(hidden.value)}" alt="Preview" onerror="this.style.display='none'">`
+          : `<span class="image-picker-empty">No image</span>`;
+      };
+    });
+    $$("[data-image-clear]").forEach(btn => {
+      btn.onclick = () => {
+        const name = btn.dataset.imageClear;
+        const wrap = btn.closest(".image-picker");
+        wrap.querySelector(`input[type="hidden"][name="${name}"]`).value = "";
+        const urlInput = wrap.querySelector(`[data-image-url="${name}"]`);
+        if (urlInput) urlInput.value = "";
+        wrap.querySelector(".image-picker-preview").innerHTML = `<span class="image-picker-empty">No image</span>`;
+      };
+    });
+  }
+
   // Editors
   function openProfileEditor() {
     const p = state.data.profile || {};
@@ -371,8 +510,10 @@
         ${field("Phone", "phone", p.phone)}
         ${field("LinkedIn URL", "linkedin", p.linkedin, "url")}
         ${field("Resume/file URL", "resumeLink", p.resumeLink, "url", "Optional link to a PDF/resume file")}
-        ${field("Profile photo path/URL", "photo", p.photo, "text", "e.g. assets/me.jpg or an image URL")}
-        ${field("Hero background path/URL", "heroBackground", p.heroBackground || "assets/1775470668186.jpg", "text")}
+      </div>
+      <div class="form-grid two">
+        ${imagePicker("Profile photo", "photo", p.photo, "Upload from your device (auto-resized). Saved in this browser — to publish for everyone, add the image to assets/ on GitHub and paste its path.", "round")}
+        ${imagePicker("Hero background (cover)", "heroBackground", p.heroBackground || "assets/1775470668186.jpg", "Upload a cover image (auto-resized). Remove resets to the default cover.")}
       </div>
       ${field("Summary (hero/about context optional)", "summary", p.summary, "textarea")}
       <hr class="sep">
@@ -382,6 +523,7 @@
       </div>
     </form>`;
     openModal("Edit profile & site settings", body, `<button class="btn small" data-close-modal>Cancel</button><button class="btn small primary" id="saveProfileBtn">Save</button>`);
+    bindImagePickers();
     $("#saveProfileBtn").onclick = () => {
       const v = getFormValues($("#profileForm"));
       Object.assign(state.data.profile, {
@@ -390,7 +532,8 @@
         heroBackground:v.heroBackground, summary:v.summary
       });
       Object.assign(state.data.settings, { siteTitle:v.siteTitle, adminPasscode:v.adminPasscode });
-      saveData(); closeModal(); renderAll();
+      if (!saveData()) return;
+      closeModal(); renderAll();
     };
   }
 
@@ -549,8 +692,10 @@
       </select></label>
       <label class="field"><span>Visible</span><select name="vis_${i}"><option value="1" ${t.visible!==false?"selected":""}>Yes</option><option value="0" ${t.visible===false?"selected":""}>No</option></select></label>
     </div>
-    <div class="admin-controls"><button type="button" class="edit-chip" data-tab-move="${i}" data-dir="-1">↑</button><button type="button" class="edit-chip" data-tab-move="${i}" data-dir="1">↓</button><button type="button" class="edit-chip" data-tab-del="${i}">Delete</button></div></div>`).join("");
-    const body = `<form id="tabsForm" class="form-grid">${rows || '<div class="muted">No tabs.</div>'}
+    <div class="admin-controls"><button type="button" class="edit-chip" data-tab-move="${i}" data-dir="-1" title="Move earlier">← Move left</button><button type="button" class="edit-chip" data-tab-move="${i}" data-dir="1" title="Move later">Move right →</button><button type="button" class="edit-chip danger" data-tab-del="${i}">Delete</button></div></div>`).join("");
+    const body = `<form id="tabsForm" class="form-grid">
+      <p class="form-hint">Order here is the order visitors see. Tip: in admin mode you can also drag the tabs on the tab bar to rearrange them.</p>
+      ${rows || '<div class="muted">No tabs.</div>'}
       <hr class="sep"><h4 style="margin:0">Add new tab</h4>
       <div class="form-grid two">${field("New tab label","new_label","")}${field("New tab ID","new_id","")}
       <label class="field"><span>New tab type</span><select name="new_type">${["about","values","experience","education","skills","projects","events","gallery"].map(tp=>`<option value="${tp}">${tp}</option>`).join("")}</select></label></div>
